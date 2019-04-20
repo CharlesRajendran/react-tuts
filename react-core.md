@@ -57,6 +57,8 @@ class App extends React.Component {
     }
 }
 ~~~
+<br>
+<hr>
 
 ### State
 - state is important to keep the data used in side the component
@@ -77,6 +79,8 @@ class App extends React.Component {
     }
 }
 ~~~
+<br>
+<hr>
 
 ### Event Handling
  - We have events like in javascript, such as onClick, onMouseOver, onCopy, ....
@@ -137,3 +141,122 @@ changeName = (e) => {
     });
 }
 ~~~
+<br>
+<hr>
+
+### create-react-app
+- A tool for rapid application development
+
+- Some features:
+  - starter project boilerplate
+  - Development Server
+  - ES6 features can be used, since there is in-build babel support.
+  - modular code
+  - optimized code
+  
+- **Extra Note: if we use `npx`, we don't need to download and keep the create-react-app tool**
+
+`npx create-react-app <app name>`
+
+#### Basic Application Structure
+- `public`
+  - `manifest.json` - for PWA support
+  - `index.html` - main file which which have a div with an id root, to render all the react views and components.
+
+- `src`
+  - `index.js, index.css` - have the `ReactDOM` related things.
+  - `App.js, App.test.js, App.css` - main component, which is the parent for all the component, we will nest other custom components inside the App component.
+  - `serviceWorker.js` - for PWA support
+
+
+#### Creating a component
+- To create a component, we need two packages, `React` and `Component`
+~~~
+import React, { Component } from 'react';
+~~~
+
+- Create a component called Warriors and Export (create components inside a component folder)
+~~~
+import React, { Component } from 'react';
+import './Warriors.css';
+
+class Warriors extends Component {
+    state = {
+        title: 'Dragon Ball Z Fighters'
+    }
+    render() {
+        return (
+            <div>
+                <h3>{ this.state.title }</h3>
+            </div>
+        )
+    }
+}
+
+export default Warriors;
+~~~
+
+- Import this basic component to App component
+~~~
+import Warriors from './components/Warriors';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        ...
+          <Warriors />
+        ...
+      </div>
+    );
+  }
+}
+~~~
+
+- `props` to get information to a component from outside using `this.props`
+##### App.js
+~~~
+class App extends Component {
+  state = {
+    fighters: [
+      { id: 1, name: 'Goku', kind:'sayen', powerlevel: 1000 },
+      { id: 2, name: 'Gohan', kind:'half sayen', powerlevel: 200 },
+      { id: 3, name: 'Vegito', kind:'sayen', powerlevel: 980 },
+      { id: 4, name: 'Krillan', kind:'human', powerlevel: 20 }
+    ]
+  }
+
+  render() {
+    return (
+        ...
+          <Warriors fighters={this.state.fighters} />
+        ...
+    );
+  }
+}
+~~~
+
+##### Warriors.js
+~~~
+render() {
+    const { fighters } = this.props;
+    
+    const fightersList = fighters.map(fighter => {
+        return (
+            <p key={fighter.id}>{fighter.name} - {fighter.powerlevel}</p>
+        )
+    })
+
+    return (
+        <div>
+            <h3>{ this.state.title }</h3>
+            {fightersList}
+        </div>
+    )
+}
+~~~
+
+- `key` is important in list of items, so react will know what to update when something changed.
+- In  `fightersList` in `render` function, react is capable enough to understand how to print the array items.
+<br>
+<hr>
