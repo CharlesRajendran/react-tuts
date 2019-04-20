@@ -4,17 +4,34 @@
         <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
         <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
         <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+        <style>
+            .text-red {
+                color: red;
+            }
+        </style>
     </head>
     <body>
         <div id="app"></div>
 
         <script type="text/babel">
             class App extends React.Component {
+                state = {
+                    name: 'Charles',
+                    age: 26
+                }
+
+                changeName = (e) => {
+                    this.setState({
+                        name: 'Dilip'
+                    });
+                }
+
                 render() {
                     return (
-                        <div>
-                            <h1>This is a component</h1>
-                            <p>{ Math.ceil(Math.random() * 10) }</p>
+                        <div className="text-red">
+                            <p> {this.state.name} is {this.state.age} years old. </p>
+                            <button onClick={this.changeName}>change name</button>
                         </div>
                     )
                 }

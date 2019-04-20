@@ -58,3 +58,82 @@ class App extends React.Component {
 }
 ~~~
 
+### State
+- state is important to keep the data used in side the component
+
+~~~
+class App extends React.Component {
+    state = {
+        name: 'Charles',
+        age: 26
+    }
+
+    render() {
+        return (
+            <div className="text-red">
+                <p> {this.state.name} is {this.state.age} years old. </p>                            
+            </div>
+        )
+    }
+}
+~~~
+
+### Event Handling
+ - We have events like in javascript, such as onClick, onMouseOver, onCopy, ....
+~~~
+class App extends React.Component {
+    ...
+
+    changeName(e) {
+        console.log(e);
+    }
+
+    render() {
+        return (
+            <div className="text-red">
+                ...
+                <button onClick={this.changeName}>change name</button>
+            </div>
+        )
+    }
+}
+~~~
+
+- This way of creating functions will work, but it has a limitation specially when we have to use the function to update states.
+
+~~~
+class App extends React.Component {
+    state = {
+        name: 'Charles',
+        age: 26
+    }
+
+    changeName(e) {
+        this.state.name = "Dilip";
+    }
+
+    render() {
+        return (
+            <div className="text-red">
+                <p> {this.state.name} is {this.state.age} years old. </p>
+                <button onClick={this.changeName}>change name</button>
+            </div>
+        )
+    }
+}
+~~~
+
+- The above code will not work, the reason is the state is, the `state` property is in global scope, but when I use `this.state` inside the function it will check for the local scope inside the function and since there is no `state` property inside the function it will through an error. 
+
+**`Uncaught TypeError: Cannot read property 'state' of undefined`**
+
+- The solution for the above case is to use `fat arrow functions`, since fat arrow functions will take the global scope and not local function scope.
+
+- **Note: when updating state, use `setState` function, which is the best practice**
+~~~
+changeName = (e) => {
+    this.setState({
+        name: 'Dilip'
+    });
+}
+~~~
