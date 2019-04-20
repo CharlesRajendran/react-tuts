@@ -1,25 +1,42 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './goku.gif';
 import './App.css';
 
 import Warriors from './components/Warriors';
+import AddWarrior from './components/AddWarrior';
 
 class App extends Component {
   state = {
-    fighters: [
-      { id: 1, name: 'Goku', kind:'sayen', powerlevel: 1000 },
-      { id: 2, name: 'Gohan', kind:'half sayen', powerlevel: 200 },
-      { id: 3, name: 'Vegito', kind:'sayen', powerlevel: 980 },
-      { id: 4, name: 'Krillan', kind:'human', powerlevel: 20 }
-    ]
+    nextId: 1,
+    fighters: []
+  }
+
+  addWarrior = (warrior) => {
+
+    const newWarriorList = [...this.state.fighters, { id: this.state.nextId, ...warrior}];
+    this.setState({fighters: newWarriorList, nextId: this.state.nextId + 1});
+  }
+
+  deleteWarrior = (warriorId) => {
+    let updatedWarriors = this.state.fighters.filter(fighter => fighter.id === warriorId ? false: true);
+    this.setState({fighters: updatedWarriors});
   }
 
   render() {
+
+    const warriorsHtml = this.state.fighters.length > 0 ? (
+      <Warriors fighters={this.state.fighters} deleteWarrior={this.deleteWarrior} />
+    ) : (
+      <h3>No Warriors Yet...</h3>
+    )
+
     return (
       <div className="App">
         <header className="App-header">
+          <h2>Universe 7 Team</h2>
           <img src={logo} className="App-logo" alt="logo" />
-          <Warriors fighters={this.state.fighters} />
+          <AddWarrior add={this.addWarrior} />
+          {warriorsHtml}
         </header>
       </div>
     );

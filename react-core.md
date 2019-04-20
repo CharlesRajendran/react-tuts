@@ -260,3 +260,102 @@ render() {
 - In  `fightersList` in `render` function, react is capable enough to understand how to print the array items.
 <br>
 <hr>
+
+### UI Components / Stateless Components / Function Components
+- don't contain states like in class components
+- receive data through only props
+- We will only have a function which will return jsx
+- Will pass props as arguments
+
+~~~
+import React from 'react';
+
+const ZWarriors = (props) => {
+    const { fighters } = props;
+    
+    const fightersList = fighters.map(fighter => {
+        return (
+            <p key={fighter.id}>{fighter.name} - {fighter.powerlevel}</p>
+        )
+    })
+
+    return (
+        <div>
+            <h3>Functional Component</h3>
+            {fightersList}
+        </div>
+    )
+}
+
+export default ZWarriors;
+~~~
+<br>
+<hr>
+
+### Passing data between components with function passing as props
+
+#### Adding a warrior function
+- problem here is, the state which have the list of warriors is in `App.js`, and my form is in another component `AddWarrior.js`, therefore I need to pass the data or function between each other, for this our approach would be,
+  - Create a function that will change the state in `App.js` and Pass that function as a prop to the other component
+  - Execute the passed function in the other component.
+
+##### App.js
+~~~
+addWarrior = (warrior) => {
+    const newWarriorList = [...this.state.fighters, { id: this.state.nextId, ...warrior}];
+    this.setState({fighters: newWarriorList, nextId: this.state.nextId + 1});
+}
+...
+...
+<AddWarrior add={this.addWarrior} />
+~~~
+
+##### AddWarrior.js
+~~~
+import React, { Component } from 'react';
+import './Warriors.css';
+
+class AddWarrior extends Component {
+    state = {
+        name: null, 
+        kind: null, 
+        powerlevel: null
+    }
+
+    // to add value to the relevant key soon as they type something in the input field
+    addItemValue = (e) => {
+        this.setState({
+            [e.target.id]: e.target.value
+        });
+    }
+
+    addWarrior = (e) => {
+        e.preventDefault();
+        this.props.add(this.state);
+        this.clearFields();
+    }
+
+    clearFields() {
+        document.querySelectorAll('input').forEach(input => {
+            input.value = '';
+            if(input.id === 'name') {
+                input.focus();
+            }
+        });
+    }
+
+    render() {
+
+        return (
+            <form>
+                <input placeholder="Enter the name" id="name" onChange={this.addItemValue} />
+                <input placeholder="Enter the kind" id="kind" onChange={this.addItemValue} />
+                <input placeholder="Enter the powerlevel" id="powerlevel" onChange={this.addItemValue} />
+                <button onClick={this.addWarrior}>ADD</button>
+            </form>
+        )
+    }
+}
+
+export default AddWarrior;
+~~~
